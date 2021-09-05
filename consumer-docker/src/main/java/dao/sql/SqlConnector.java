@@ -14,7 +14,6 @@ public class SqlConnector {
   private static String port;
   private static String user;
   private static String userPassword;
-  private static String driver;
   private static String database;
   private SqlConnector() {}
 
@@ -22,18 +21,12 @@ public class SqlConnector {
   Get database connection info from a properties file: connection.prop
    */
   static {
-    try {
-      host = System.getenv("MYSQL_HOST");
-      port = System.getenv("MYSQL_PORT");
-      user = System.getenv("MYSQL_USER");
-      userPassword = System.getenv("MYSQL_USER_PASSWORD");
-      driver = System.getenv("MYSQL_DRIVER");
-      database = System.getenv("MYSQL_DATABASE");
+      host = System.getenv("SQL_HOST");
+      port = System.getenv("SQL_PORT");
+      user = System.getenv("SQL_USER");
+      userPassword = System.getenv("SQL_USER_PASSWORD");
+      database = System.getenv("SQL_DATABASE");
       connURL="jdbc:mysql://"+host+":"+port+"/"+database+"?allowPublicKeyRetrieval=true";
-      Class.forName(driver);
-    } catch (ClassNotFoundException e) {
-      e.printStackTrace();
-    }
   }
 
 

@@ -22,7 +22,7 @@ public class Main {
         Connection connection = factory.newConnection();
         Channel channel = connection.createChannel();
         channel.queueDeclare(QUEUE_NAME, true, false, false,null);
-
+        System.out.println("Listening for Messages...")
         JSONParser parser = new JSONParser();
         DeliverCallback deliverCallback = (consumerTag, message) -> {
             try {

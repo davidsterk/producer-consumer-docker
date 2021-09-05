@@ -16,7 +16,6 @@ public class Main {
     private static final String RABBITMQ_HOST = System.getenv("RABBITMQ_HOST");
     private static final String QUEUE_NAME = "smartwatch";
     public static void main(String[] args) {
-        System.out.println(RABBITMQ_HOST);
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost(RABBITMQ_HOST);
 
