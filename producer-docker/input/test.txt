@@ -1,0 +1,2 @@
+{"sensor_name":"Light","timestamp":"Tue Feb 28 09:29:41 EST 2017","sensor_data":{"lux":21}}
+{"sensor_name":"Battery","timestamp":"Tue Dec 13 12:34:30 EST 2016","sensor_data":{"percent":100,"charging":true}}

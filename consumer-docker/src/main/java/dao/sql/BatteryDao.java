@@ -1,0 +1,31 @@
+package dao.sql;
+
+import dao.domain.Battery;
+import dao.Dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+public class BatteryDao implements Dao<Battery> {
+
+    private static final String INSERT_STMT = "INSERT INTO batterysensor (sensorname, "
+            + "timestamp, percent, charging) Values (?, ?, ? , ?)";
+    @Override
+    public void create(Battery battery) throws SQLException {
+        Connection conn = SqlConnector.getConnection();
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(INSERT_STMT);
+            pstmt.setString(1, battery.getSensorName());
+            pstmt.setString(2, battery.getTimeStamp());
+            pstmt.setString(3, battery.getPercent());
+            pstmt.setString(4, battery.getCharging());
+            pstmt.execute();
+            pstmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            conn.close();
+        }
+    }
+}
