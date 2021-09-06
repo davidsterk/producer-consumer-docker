@@ -12,7 +12,7 @@ public class BluetoothDao implements Dao<Bluetooth> {
     private static final String INSERT_STMT = "INSERT INTO bluetooth (sensorname, "
             + "timestamp, state) Values (?, ?, ?)";
     @Override
-    public void create(Bluetooth bluetooth) throws SQLException {
+    public void create(Bluetooth bluetooth) throws Exception {
         Connection conn = SqlConnector.getConnection();
         try {
             PreparedStatement pstmt = conn.prepareStatement(INSERT_STMT);
@@ -21,8 +21,9 @@ public class BluetoothDao implements Dao<Bluetooth> {
             pstmt.setString(3, bluetooth.getState());
             pstmt.execute();
             pstmt.close();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            throw e;
         } finally {
             conn.close();
         }

@@ -12,7 +12,7 @@ public class HeartRateDao implements Dao<HeartRate> {
             + "timestamp, bpm) Values (?, ?, ?)";
 
     @Override
-    public void create(HeartRate heartRate) throws SQLException {
+    public void create(HeartRate heartRate) throws Exception {
         Connection conn = SqlConnector.getConnection();
         try {
             PreparedStatement pstmt = conn.prepareStatement(INSERT_STMT);
@@ -21,8 +21,9 @@ public class HeartRateDao implements Dao<HeartRate> {
             pstmt.setString(3, heartRate.getBpm());
             pstmt.execute();
             pstmt.close();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            throw e;
         } finally {
             conn.close();
         }

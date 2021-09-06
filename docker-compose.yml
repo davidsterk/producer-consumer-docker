@@ -22,6 +22,7 @@ services:
       MYSQL_DATABASE: smartwatch
     volumes:
       - mysql-smartwatch-data:/var/lib/mysql
+      - ./sql:/docker-entrypoint-initdb.d/:ro
 
   producer-docker:
     build: ./producer-docker
@@ -40,6 +41,7 @@ services:
       SQL_USER: root
       SQL_USER_PASSWORD: smartwatch
       SQL_DATABASE: smartwatch
+      SQL_CONN_URL: jdbc:mysql://mysql-smartwatch:3306/smartwatch?allowPublicKeyRetrieval=true
       SQL_HOST: mysql-smartwatch
       SQL_PORT: 3306
       RABBITMQ_HOST: rabbitmq-smartwatch

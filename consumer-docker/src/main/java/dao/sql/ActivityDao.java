@@ -12,7 +12,7 @@ public class ActivityDao implements Dao<Activity> {
         private final static String INSERT_STMT = "INSERT INTO activity(sensorname, "
             + "timestamp, time_stamp, stepcounts, stepdelta) Values (?, ?, ?, ?, ?)";
     @Override
-    public void create(Activity activity) throws SQLException {
+    public void create(Activity activity) throws Exception {
         Connection conn = SqlConnector.getConnection();
         try {
             PreparedStatement pstmt = conn.prepareStatement(INSERT_STMT);
@@ -23,8 +23,9 @@ public class ActivityDao implements Dao<Activity> {
             pstmt.setString(5, activity.getStepDelta());
             pstmt.execute();
             pstmt.close();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            throw e;
         } finally {
             conn.close();
         }

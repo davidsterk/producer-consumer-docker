@@ -1,7 +1,7 @@
+USE smartwatch;
 
 CREATE TABLE IF NOT EXISTS activfit
 (sensorname varchar(50), starttime varchar(50), endtime varchar(50), activity varchar(50), duration varchar(50));
-
 
 CREATE TABLE IF NOT EXISTS activity
 (sensorname varchar(50), timestamp varchar(50), time_stamp varchar(50), stepcounts varchar(50), stepdelta varchar(50));

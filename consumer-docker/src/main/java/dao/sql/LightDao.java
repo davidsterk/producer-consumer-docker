@@ -13,7 +13,7 @@ public class LightDao implements Dao<Light> {
             + "timestamp, lux) Values (?, ?, ?)";
 
     @Override
-    public void create(Light light) throws SQLException {
+    public void create(Light light) throws Exception {
         Connection conn = SqlConnector.getConnection();
         try {
             PreparedStatement pstmt = conn.prepareStatement(INSERT_STMT);
@@ -22,8 +22,9 @@ public class LightDao implements Dao<Light> {
             pstmt.setString(3, light.getLux());
             pstmt.execute();
             pstmt.close();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            throw e;
         } finally {
             conn.close();
         }

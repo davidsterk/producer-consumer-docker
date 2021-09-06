@@ -13,7 +13,7 @@ public class ActivFitDao implements Dao<ActivFit> {
             + "starttime, endtime, activity, duration) Values (?, ?, ?, ?, ?)";
 
     @Override
-    public void create(ActivFit activFit) throws SQLException {
+    public void create(ActivFit activFit) throws Exception {
         Connection conn = SqlConnector.getConnection();
         try {
             PreparedStatement pstmt = conn.prepareStatement(INSERT_STMT);
@@ -26,6 +26,7 @@ public class ActivFitDao implements Dao<ActivFit> {
             pstmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
+            throw e;
         } finally {
             conn.close();
         }

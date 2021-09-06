@@ -6,36 +6,55 @@ package dao.sql;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.concurrent.TimeUnit;
 
 public class SqlConnector {
 
-  private static String connURL;
-  private static String host;
-  private static String port;
-  private static String user;
-  private static String userPassword;
-  private static String database;
+  private static final String connURL;
+  private static final String user;
+  private static final String userPassword;
+
+  private static Connection conn;
   private SqlConnector() {}
 
   /*
-  Get database connection info from a properties file: connection.prop
+  Get database connection info from a environment variables
    */
   static {
-      host = System.getenv("SQL_HOST");
-      port = System.getenv("SQL_PORT");
       user = System.getenv("SQL_USER");
       userPassword = System.getenv("SQL_USER_PASSWORD");
-      database = System.getenv("SQL_DATABASE");
-      connURL="jdbc:mysql://"+host+":"+port+"/"+database+"?allowPublicKeyRetrieval=true";
+      connURL= System.getenv("SQL_CONN_URL");
   }
 
-
+  private static void createConnection() throws InterruptedException, SQLException {
+      if(conn == null || conn.isClosed()) {
+          int attempts = 0;
+          int maxAttempts = 5;
+          boolean needConn = true;
+          while(needConn) {
+              try {
+                  conn = DriverManager.getConnection(connURL, user, userPassword);
+              } catch (SQLException e) {
+                  System.out.println("Failed to connect to database");
+                  if(++attempts<maxAttempts) {
+                      System.out.println("Retrying Connection in 5 seconds...");
+                      TimeUnit.SECONDS.sleep(5);
+                  } else {
+                      e.printStackTrace();
+                      throw e;
+                  }
+              } catch (Exception e) {
+                  e.printStackTrace();
+                  throw e;
+              }
+          }
+      }
+  }
   /*
   Static method that returns a new Mysql connection
    */
-  public static Connection getConnection() throws SQLException {
-    Connection conn = DriverManager.getConnection(connURL, user, userPassword);
-    conn.setAutoCommit(true);
+  public static Connection getConnection() throws SQLException, InterruptedException {
+      createConnection();
     return conn;
     }
 

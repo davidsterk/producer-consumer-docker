@@ -12,7 +12,7 @@ public class BatteryDao implements Dao<Battery> {
     private static final String INSERT_STMT = "INSERT INTO batterysensor (sensorname, "
             + "timestamp, percent, charging) Values (?, ?, ? , ?)";
     @Override
-    public void create(Battery battery) throws SQLException {
+    public void create(Battery battery) throws Exception {
         Connection conn = SqlConnector.getConnection();
         try {
             PreparedStatement pstmt = conn.prepareStatement(INSERT_STMT);
@@ -22,8 +22,9 @@ public class BatteryDao implements Dao<Battery> {
             pstmt.setString(4, battery.getCharging());
             pstmt.execute();
             pstmt.close();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            throw e;
         } finally {
             conn.close();
         }

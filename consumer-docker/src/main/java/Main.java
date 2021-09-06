@@ -8,6 +8,7 @@ import org.json.simple.parser.JSONParser;
 import service.StorageService;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -24,7 +25,7 @@ public class Main {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost(RABBITMQ_HOST);
 
-        channel = getChannel(factory);
+        getChannel(factory);
         try {
             channel.queueDeclare(QUEUE_NAME, true, false, false, null);
             System.out.println("Listening for Messages...");
@@ -47,21 +48,23 @@ public class Main {
     }
 
 
-    public static Channel getChannel(ConnectionFactory factory) throws InterruptedException, IOException, TimeoutException {
+    public static void getChannel(ConnectionFactory factory) throws InterruptedException, IOException, TimeoutException {
         int attempts = 0;
         int maxAttempts = 5;
-        while(true) {
+        boolean needConn = true;
+        while(needConn) {
             try {
                 connection = factory.newConnection();
                 channel = connection.createChannel();
-                return channel;
-            } catch (Exception e) {
+                needConn = false;
+            } catch (ConnectException e) {
                 System.out.println("Failed to Connect to RabbitMQ Host: "+RABBITMQ_HOST);
                 if(++attempts<maxAttempts) {
                     System.out.println("Retrying Connection in 5 seconds...");
                     TimeUnit.SECONDS.sleep(5);
                 } else {
-                    throw e;
+                    e.printStackTrace();
+                    System.exit(1);
                 }
             }
         }
