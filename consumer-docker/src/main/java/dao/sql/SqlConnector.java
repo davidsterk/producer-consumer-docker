@@ -34,6 +34,7 @@ public class SqlConnector {
           while(needConn) {
               try {
                   conn = DriverManager.getConnection(connURL, user, userPassword);
+                  needConn = false;
               } catch (SQLException e) {
                   System.out.println("Failed to connect to database");
                   if(++attempts<maxAttempts) {
