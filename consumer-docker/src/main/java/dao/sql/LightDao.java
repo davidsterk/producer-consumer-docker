@@ -25,8 +25,6 @@ public class LightDao implements Dao<Light> {
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
-        } finally {
-            conn.close();
         }
     }
 }

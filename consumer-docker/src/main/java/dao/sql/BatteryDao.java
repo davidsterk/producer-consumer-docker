@@ -25,8 +25,6 @@ public class BatteryDao implements Dao<Battery> {
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
-        } finally {
-            conn.close();
         }
     }
 }

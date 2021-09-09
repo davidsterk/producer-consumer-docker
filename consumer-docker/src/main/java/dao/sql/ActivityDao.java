@@ -26,8 +26,6 @@ public class ActivityDao implements Dao<Activity> {
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
-        } finally {
-            conn.close();
         }
     }
 }

@@ -24,8 +24,6 @@ public class HeartRateDao implements Dao<HeartRate> {
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
-        } finally {
-            conn.close();
         }
     }
 }

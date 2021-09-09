@@ -24,8 +24,6 @@ public class BluetoothDao implements Dao<Bluetooth> {
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
-        } finally {
-            conn.close();
         }
     }
 }

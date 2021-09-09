@@ -59,5 +59,10 @@ public class SqlConnector {
     return conn;
     }
 
-
+  public void closeConnection() throws SQLException {
+      if(conn != null) {
+          conn.close();
+      }
   }
+
+}

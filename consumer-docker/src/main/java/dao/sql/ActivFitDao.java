@@ -27,8 +27,6 @@ public class ActivFitDao implements Dao<ActivFit> {
         } catch (SQLException e) {
             e.printStackTrace();
             throw e;
-        } finally {
-            conn.close();
         }
     }
 }
