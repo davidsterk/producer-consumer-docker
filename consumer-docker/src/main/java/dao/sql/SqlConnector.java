@@ -25,7 +25,10 @@ public class SqlConnector {
       userPassword = System.getenv("SQL_USER_PASSWORD");
       connURL= System.getenv("SQL_CONN_URL");
   }
-
+/*
+* method createMethod() attempts to connect to the mysql database. If unsuccessful, it will try again
+* after 5 seconds. Program will terminate after 5 unsuccessful attempts.
+ */
   private static void createConnection() throws InterruptedException, SQLException {
       if(conn == null || conn.isClosed()) {
           int attempts = 0;

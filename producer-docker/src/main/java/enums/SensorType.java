@@ -1,9 +1,5 @@
 /*
- * Name: David Sterk
- * Date: 12/08/2020
- * Course: CS-665
- * FinalProject
- * Description: enum SensorType. Defines Constants for the different types of data
+* Description: enum SensorType. Defines Constants for the different types of data
  */
 package enums;
 

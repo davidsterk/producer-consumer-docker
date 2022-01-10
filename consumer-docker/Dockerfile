@@ -1,5 +1,5 @@
 ## Build Stage ##
-FROM maven:3.8.2-jdk-11 AS mvn_build
+FROM maven:3.8.4-jdk-11 AS mvn_build
 WORKDIR /app
 COPY pom.xml .
 COPY src src/

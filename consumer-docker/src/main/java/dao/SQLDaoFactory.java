@@ -1,5 +1,5 @@
 /*
- * Description: Class SqlInsertFactory. Implements the StrategyFactory interface
+ * Description: Class SQLDaoFactory. Implements the DaoFactory interface
  */
 package dao;
 
@@ -29,7 +29,7 @@ public class SQLDaoFactory implements DaoFactory {
   }
 
   /*
-  Returns a SqlInsertStrategy sublcass
+  Returns a Dao
    */
   @Override
   public Dao getDao(SensorType sensorType) {

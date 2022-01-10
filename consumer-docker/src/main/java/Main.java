@@ -1,3 +1,11 @@
+/**
+ * Consumer-Docker Main class
+ * Program works as follows
+ * First, program attempts to connect to the rabbitmq server
+ * Second, it listens and removes messages from the queue
+ * Third, based on the sensor type contained within the message, it will insert the contents into the appropriate table
+ * within mysql
+ */
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -47,7 +55,14 @@ public class Main {
         }
     }
 
-
+    /**
+     * getChannel: Attempts to establish a connection with the rabbitmq host. If unsuccessful, it will try again
+     * after 5 seconds. Program will terminate after 5 unsuccessful attempts.
+     * @param factory
+     * @throws InterruptedException
+     * @throws IOException
+     * @throws TimeoutException
+     */
     public static void getChannel(ConnectionFactory factory) throws InterruptedException, IOException, TimeoutException {
         int attempts = 0;
         int maxAttempts = 5;

@@ -1,5 +1,7 @@
 package service;
-
+/*
+Class StorageService, Singleton that assigns the message object to the appropriate domain object
+ */
 import dao.*;
 import dao.domain.*;
 import enums.SensorType;
@@ -10,10 +12,19 @@ public class StorageService {
     private static final DaoFactory daoFactory;
 
     private StorageService(){}
-
+/*
+Initialize daoFactory
+ */
     static {
         daoFactory = new SQLDaoFactory();
     }
+
+    /**
+     * method ProcessData. Uses the daoFactory to assign the message to the appropriate domain object based on the
+     * sensor type. The sensor data contained within the message is inserted mysql
+     * @param json
+     * @throws Exception
+     */
     public static void processData(JSONObject json) throws Exception {
         SensorType sensorType = SensorType.getSensorType(json.get("type").toString());
         Dao dao = daoFactory.getDao(sensorType);

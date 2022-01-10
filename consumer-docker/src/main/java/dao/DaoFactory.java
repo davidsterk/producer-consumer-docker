@@ -1,5 +1,5 @@
 /*
- * Description: Interface StrategyFactory. defines the createStatement method
+ * Description: Interface DaoFactory. Defines the getDao method
  */
 package dao;
 
