@@ -6,8 +6,12 @@ import dao.*;
 import dao.domain.*;
 import enums.SensorType;
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class StorageService {
+
+    private static Logger logger = LoggerFactory.getLogger(StorageService.class);
 
     private static final DaoFactory daoFactory;
 
@@ -60,5 +64,7 @@ Initialize daoFactory
                 break;
         }
         dao.create(domain);
+        logger.info(domain.getClass().getSimpleName() + " object inserted into msyql");
+
     }
 }

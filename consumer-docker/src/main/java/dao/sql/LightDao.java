@@ -5,8 +5,9 @@ import dao.domain.Light;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
+/*
+Class LightDao. Implements Dao interface. Manages the sql DML for Light
+ */
 public class LightDao implements Dao<Light> {
 
     private static final String INSERT_STMT = "INSERT INTO lightsensor (sensorname, "

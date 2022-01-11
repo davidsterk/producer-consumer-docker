@@ -1,7 +1,9 @@
 package dao.domain;
 
 import org.json.simple.JSONObject;
-
+/*
+Description: Class Light. Domain model for light data
+ */
 public class Light {
 
     private String sensorName;

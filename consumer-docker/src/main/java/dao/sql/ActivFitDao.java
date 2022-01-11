@@ -5,8 +5,9 @@ import dao.Dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
+/*
+Class ActivityFitDao. Implements Dao interface. Manages the sql DML for ActivityFit
+ */
 public class ActivFitDao implements Dao<ActivFit> {
 
     private static final String INSERT_STMT = "INSERT INTO activfit(sensorname, "
@@ -24,8 +25,7 @@ public class ActivFitDao implements Dao<ActivFit> {
             pstmt.setString(5, activFit.getDuration());
             pstmt.execute();
             pstmt.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
             throw e;
         }
     }

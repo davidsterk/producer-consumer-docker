@@ -5,8 +5,9 @@ import dao.domain.HeartRate;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
+/*
+Class HeartRateDao. Implements Dao interface. Manages the sql DML for HeartRate
+ */
 public class HeartRateDao implements Dao<HeartRate> {
         private static final String INSERT_STMT = "INSERT INTO heartrate (sensorname, "
             + "timestamp, bpm) Values (?, ?, ?)";

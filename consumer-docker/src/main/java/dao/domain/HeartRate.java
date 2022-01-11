@@ -1,7 +1,9 @@
 package dao.domain;
 
 import org.json.simple.JSONObject;
-
+/*
+Description: Class HeartRate. Domain model for heart rate data
+ */
 public class HeartRate {
 
     private String sensorName;

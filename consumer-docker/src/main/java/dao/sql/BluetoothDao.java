@@ -5,8 +5,9 @@ import dao.domain.Bluetooth;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
+/*
+Class BluetoothDao. Implements Dao interface. Manages the sql DML for Bluetooth
+ */
 public class BluetoothDao implements Dao<Bluetooth> {
 
     private static final String INSERT_STMT = "INSERT INTO bluetooth (sensorname, "
@@ -22,7 +23,6 @@ public class BluetoothDao implements Dao<Bluetooth> {
             pstmt.execute();
             pstmt.close();
         } catch (Exception e) {
-            e.printStackTrace();
             throw e;
         }
     }

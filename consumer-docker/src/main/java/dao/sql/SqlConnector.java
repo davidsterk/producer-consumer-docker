@@ -3,6 +3,9 @@
  */
 package dao.sql;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -13,6 +16,7 @@ public class SqlConnector {
   private static final String connURL;
   private static final String user;
   private static final String userPassword;
+  private static Logger logger = LoggerFactory.getLogger(SqlConnector.class);
 
   private static Connection conn;
   private SqlConnector() {}
@@ -39,16 +43,16 @@ public class SqlConnector {
                   conn = DriverManager.getConnection(connURL, user, userPassword);
                   needConn = false;
               } catch (SQLException e) {
-                  System.out.println("Failed to connect to database");
+                  logger.warn("Failed to connect to database");
                   if(++attempts<maxAttempts) {
-                      System.out.println("Retrying Connection in 5 seconds...");
+                      logger.warn("Retrying Connection in 5 seconds...");
                       TimeUnit.SECONDS.sleep(5);
                   } else {
-                      e.printStackTrace();
+                      logger.error(e.getMessage());
                       throw e;
                   }
               } catch (Exception e) {
-                  e.printStackTrace();
+                  logger.error(e.getMessage());
                   throw e;
               }
           }

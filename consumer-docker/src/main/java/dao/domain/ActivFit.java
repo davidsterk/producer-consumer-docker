@@ -1,7 +1,9 @@
 package dao.domain;
 
 import org.json.simple.JSONObject;
-
+/*
+Description: Class ActivFit. Domain model for ActivFit data
+ */
 public class ActivFit {
 
     private String sensorName;

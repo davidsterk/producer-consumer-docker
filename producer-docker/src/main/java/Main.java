@@ -21,8 +21,13 @@ import java.net.ConnectException;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 public class Main {
+
+    private static Logger logger = LoggerFactory.getLogger(Main.class);
+
     private static final String RABBITMQ_HOST = System.getenv("RABBITMQ_HOST");
     private static final String QUEUE_NAME = "smartwatch";
     private static Channel channel;
@@ -32,6 +37,7 @@ public class Main {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost(RABBITMQ_HOST);
         getChannel(factory);
+        logger.info("Connected to RabbitMQ Host Channel:" + channel.getChannelNumber());
         try {
             channel.queueDeclare(QUEUE_NAME, true, false, false, null);
             JSONParser parser = new JSONParser();
@@ -48,10 +54,10 @@ public class Main {
                         message.put("type", sensorType);
                         message.put("contents", json);
                         channel.basicPublish("", QUEUE_NAME, null, message.toString().getBytes(StandardCharsets.UTF_8));
-                        System.out.println("Message Sent: " + message.toString());
+                        logger.info("Message Sent: " + message.toString());
                     }
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    logger.error(ex.getMessage());
                     System.exit(1);
                 }
             }
@@ -59,7 +65,7 @@ public class Main {
             channel.close();
             connection.close();
         } catch (IOException | TimeoutException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
     }
 
@@ -81,13 +87,13 @@ public class Main {
                 channel = connection.createChannel();
                 needConn = false;
             } catch (ConnectException e) {
-                System.out.println("Failed to Connect to RabbitMQ Host: "+RABBITMQ_HOST);
+                logger.warn("Failed to Connect to RabbitMQ Host: "+RABBITMQ_HOST);
                 if(++attempts<maxAttempts) {
-                    System.out.println("Retrying Connection in 5 seconds...");
+                    logger.warn("Retrying Connection in 5 seconds...");
                     TimeUnit.SECONDS.sleep(5);
                 } else {
                     e.printStackTrace();
-                    System.exit(1);
+                    logger.error(e.getMessage());
                 }
             }
         }

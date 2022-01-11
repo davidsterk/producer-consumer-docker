@@ -1,7 +1,9 @@
 package dao.domain;
 
 import org.json.simple.JSONObject;
-
+/*
+Description: Class Bluetooth. Domain model for Bluetooth data
+ */
 public class Bluetooth {
 
     private String sensorName;

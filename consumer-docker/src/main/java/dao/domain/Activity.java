@@ -1,7 +1,9 @@
 package dao.domain;
 
 import org.json.simple.JSONObject;
-
+/*
+Description: Class Activity. Domain model for Activity data
+ */
 public class Activity {
 
         private String sensorName;

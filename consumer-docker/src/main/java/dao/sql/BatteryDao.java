@@ -2,11 +2,11 @@ package dao.sql;
 
 import dao.domain.Battery;
 import dao.Dao;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
+/*
+Class BatteryDao. Implements Dao interface. Manages the sql DML for Battery
+ */
 public class BatteryDao implements Dao<Battery> {
 
     private static final String INSERT_STMT = "INSERT INTO batterysensor (sensorname, "
@@ -23,7 +23,6 @@ public class BatteryDao implements Dao<Battery> {
             pstmt.execute();
             pstmt.close();
         } catch (Exception e) {
-            e.printStackTrace();
             throw e;
         }
     }

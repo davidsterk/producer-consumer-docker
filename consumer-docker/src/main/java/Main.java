@@ -13,6 +13,8 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import service.StorageService;
 
 import java.io.IOException;
@@ -22,6 +24,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 public class Main {
+
+    private static Logger logger = LoggerFactory.getLogger(Main.class);
 
     private static final String RABBITMQ_HOST = System.getenv("RABBITMQ_HOST");
     private static final String QUEUE_NAME = "smartwatch";
@@ -34,24 +38,25 @@ public class Main {
         factory.setHost(RABBITMQ_HOST);
 
         getChannel(factory);
+        logger.info("Connected to RabbitMQ Channel: "+channel.getChannelNumber());
         try {
             channel.queueDeclare(QUEUE_NAME, true, false, false, null);
-            System.out.println("Listening for Messages...");
+            logger.info("Listening for Messages...");
             JSONParser parser = new JSONParser();
             DeliverCallback deliverCallback = (consumerTag, message) -> {
                 try {
                     StorageService.processData((JSONObject) parser.parse(new String(message.getBody(), StandardCharsets.UTF_8)));
-                    System.out.println("Inserted Message");
+                    logger.info("Message Processed");
                     channel.basicAck(message.getEnvelope().getDeliveryTag(), false);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e.getMessage());
                     System.exit(1);
                 }
             };
             channel.basicConsume(QUEUE_NAME, false, deliverCallback, consumerTag -> {
             });
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
     }
 
@@ -73,12 +78,12 @@ public class Main {
                 channel = connection.createChannel();
                 needConn = false;
             } catch (ConnectException e) {
-                System.out.println("Failed to Connect to RabbitMQ Host: "+RABBITMQ_HOST);
+                logger.warn("Failed to Connect to RabbitMQ Host: "+RABBITMQ_HOST);
                 if(++attempts<maxAttempts) {
-                    System.out.println("Retrying Connection in 5 seconds...");
+                    logger.warn("Retrying Connection in 5 seconds...");
                     TimeUnit.SECONDS.sleep(5);
                 } else {
-                    e.printStackTrace();
+                    logger.error(e.getMessage());
                     System.exit(1);
                 }
             }

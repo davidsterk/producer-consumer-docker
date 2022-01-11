@@ -6,9 +6,10 @@ import dao.Dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-
+/*
+Class ActivityDao. Implements Dao interface. Manages the sql DML for Activity
+ */
 public class ActivityDao implements Dao<Activity> {
-
         private final static String INSERT_STMT = "INSERT INTO activity(sensorname, "
             + "timestamp, time_stamp, stepcounts, stepdelta) Values (?, ?, ?, ?, ?)";
     @Override
@@ -23,8 +24,7 @@ public class ActivityDao implements Dao<Activity> {
             pstmt.setString(5, activity.getStepDelta());
             pstmt.execute();
             pstmt.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
             throw e;
         }
     }

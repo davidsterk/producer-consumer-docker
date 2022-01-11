@@ -1,7 +1,9 @@
 package dao.domain;
 
 import org.json.simple.JSONObject;
-
+/*
+Description: Class Battery. Domain model for Battery data
+ */
 public class Battery {
 
     private String sensorName;
