@@ -26,6 +26,9 @@ public enum SensorType {
   Factory method to retrieve an enum
    */
   public static SensorType getSensorType(String type) {
+    if(type == null) {
+      return NULL_TYPE;
+    }
     switch(type) {
       case("activity"):
         return ACTIVITY;

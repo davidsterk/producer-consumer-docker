@@ -33,28 +33,32 @@ public class SQLDaoFactory implements DaoFactory {
    */
   @Override
   public Dao getDao(SensorType sensorType) {
-    switch(sensorType) {
-      case ACTIVITY:
-        dao = activityDao;
-        break;
-      case ACTIVFIT:
-        dao = activFitDao;
-        break;
-      case HEART_RATE:
-        dao = heartRateDao;
-        break;
-      case BATTERY:
-        dao = batteryDao;
-        break;
-      case BLUETOOTH:
-        dao = bluetoothDao;
-        break;
-      case LIGHT:
-        dao = lightDao;
-        break;
-      default:
-        dao = nullDao;
-        break;
+    if(sensorType == null) {
+      dao = nullDao;
+    } else {
+      switch(sensorType) {
+        case ACTIVITY:
+          dao = activityDao;
+          break;
+        case ACTIVFIT:
+          dao = activFitDao;
+          break;
+        case HEART_RATE:
+          dao = heartRateDao;
+          break;
+        case BATTERY:
+          dao = batteryDao;
+          break;
+        case BLUETOOTH:
+          dao = bluetoothDao;
+          break;
+        case LIGHT:
+          dao = lightDao;
+          break;
+        default:
+          dao = nullDao;
+          break;
+      }
     }
     return dao;
   }
