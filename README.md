@@ -17,7 +17,7 @@ appropriate data access object model which is used to insert into the mysql data
 The project is completely self-contained and can be run with Docker Compose using the docker-compose.yml file. Open a
 terminal and navigate to this project's root directory: producer-consumer-docker
 
-To Build the project with consumer, run:
+To build the project with one consumer, run:
 
 ```
 docker-compose up
