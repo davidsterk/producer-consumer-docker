@@ -10,6 +10,9 @@ public class DomainFactory {
     private DomainFactory() {};
   
     public static Object createModel(SensorType sensorType, JSONObject contents) {
+        if(sensorType == null) {
+            return new NullDomain();
+        }
         switch(sensorType) {
             case ACTIVITY:
                 return new Activity(contents);

@@ -42,9 +42,4 @@ hs_err_pid*
 
 *.log
 
-# properties file
-connection.prop
-
-# input files
-**/input/input.txt
 
