@@ -1,0 +1,60 @@
+services:
+  rabbitmq-smartwatch:
+    image: rabbitmq:management
+    hostname: rabbitmq-smartwatch
+    networks:
+      - producer-consumer-smartwatch
+    ports:
+      - "15672:15672"
+      - "5672"
+    volumes:
+      - rabbitmq-smartwatch-data:/var/lib/rabbitmq
+
+  mysql-smartwatch:
+    image: mysql:latest
+    hostname: mysql-smartwatch
+    networks:
+      - producer-consumer-smartwatch
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: smartwatch
+      MYSQL_DATABASE: smartwatch
+    volumes:
+      - mysql-smartwatch-data:/var/lib/mysql
+      - ./sql:/docker-entrypoint-initdb.d/:ro
+
+  producer-docker:
+    build: ./producer-docker
+    networks:
+      - producer-consumer-smartwatch
+    environment:
+      RABBITMQ_HOST: rabbitmq-smartwatch
+    depends_on:
+      - rabbitmq-smartwatch
+
+  consumer-docker:
+    build: ./consumer-docker
+    networks:
+      - producer-consumer-smartwatch
+    environment:
+      SQL_USER: root
+      SQL_USER_PASSWORD: smartwatch
+      SQL_DATABASE: smartwatch
+      SQL_CONN_URL: jdbc:mariadb://mysql-smartwatch:3306/smartwatch?allowPublicKeyRetrieval=true
+      SQL_HOST: mysql-smartwatch
+      SQL_PORT: 3306
+      RABBITMQ_HOST: rabbitmq-smartwatch
+    depends_on:
+      - rabbitmq-smartwatch
+      - mysql-smartwatch
+
+networks:
+  producer-consumer-smartwatch:
+    name: producer-consumer-smartwatch
+
+volumes:
+  rabbitmq-smartwatch-data:
+    name: rabbitmq-smartwatch-data
+  mysql-smartwatch-data:
+    name: mysql-smartwatch-data
