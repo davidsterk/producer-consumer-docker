@@ -1,5 +1,5 @@
 ## Build Stage ##
-FROM maven:3.9.0-eclipse-temurin-17 AS mvn_build
+FROM maven:3.9.6-eclipse-temurin-21 AS mvn_build
 WORKDIR /app
 COPY pom.xml .
 COPY src src/
@@ -7,7 +7,7 @@ RUN mvn clean package
 
 
 ## Run Stage ##
-FROM eclipse-temurin:17-jdk
+FROM eclipse-temurin:21-jdk
 WORKDIR /app
 ENV RABBITMQ_HOST=rabbitmq-smartwatch
 ENV SQL_USER=root
