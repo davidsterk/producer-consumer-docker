@@ -26,7 +26,7 @@ import org.slf4j.Logger;
 
 public class Main {
 
-    private static Logger logger = LoggerFactory.getLogger(Main.class);
+    private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
     private static final String RABBITMQ_HOST = System.getenv("RABBITMQ_HOST");
     private static final String QUEUE_NAME = "smartwatch";
@@ -47,7 +47,7 @@ public class Main {
             while ((output = br.readLine()) != null) {
                 output = output.trim();
                 try {
-                    if (!output.equals("")) {
+                    if (!output.isEmpty()) {
                         JSONObject json = (JSONObject) parser.parse(output);
                         String sensorType = json.get("sensor_name").toString().toLowerCase();
                         JSONObject message = new JSONObject();
@@ -92,7 +92,7 @@ public class Main {
                     logger.warn("Retrying Connection in 5 seconds...");
                     TimeUnit.SECONDS.sleep(5);
                 } else {
-                    e.printStackTrace();
+                    logger.error("Failed to Connect to RabbitMQ Host: "+RABBITMQ_HOST);
                     logger.error(e.getMessage());
                 }
             }

@@ -25,7 +25,7 @@ import java.util.concurrent.TimeoutException;
 
 public class Main {
 
-    private static Logger logger = LoggerFactory.getLogger(Main.class);
+    private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
     private static final String RABBITMQ_HOST = System.getenv("RABBITMQ_HOST");
     private static final String QUEUE_NAME = "smartwatch";

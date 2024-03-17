@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 public class StorageService {
 
-    private static Logger logger = LoggerFactory.getLogger(StorageService.class);
+    private static final Logger logger = LoggerFactory.getLogger(StorageService.class);
     private static final DaoFactory daoFactory;
 
     private StorageService(){}
