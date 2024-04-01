@@ -11,8 +11,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.Channel;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.io.BufferedReader;
 import java.io.File;
@@ -41,7 +39,6 @@ public class Main {
         logger.info("Connected to RabbitMQ Host Channel:" + channel.getChannelNumber());
         try {
             channel.queueDeclare(QUEUE_NAME, true, false, false, null);
-            JSONParser parser = new JSONParser();
             File inputFile = new File("input//input.txt");
             BufferedReader br = new BufferedReader(new FileReader(inputFile));
             String output;
