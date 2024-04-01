@@ -2,7 +2,7 @@ import enums.SensorType;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class Tests {
+public class ProducerTests {
 
     /*
 Tests whether the SensorType getSensorType handles nulls

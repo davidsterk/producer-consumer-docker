@@ -1,33 +1,25 @@
 package dao.domain;
 
-import org.json.simple.JSONObject;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.Map;
+
 /*
 Description: Class Activity. Domain model for Activity data
  */
 public class Activity {
 
+        @JsonProperty("sensor_name")
         private String sensorName;
+        @JsonProperty("timestamp")
         private String timeStamp;
+        @JsonProperty("time_stamp")
         private String timeStamp1;
-        private String stepCounts;
-        private String stepDelta;
+        @JsonProperty("sensor_data")
+        private Map<String, String> sensorData;
 
-        public Activity(String sensorName, String timeStamp, String timeStamp1, String stepCounts, String stepDelta ) {
-                this.sensorName = sensorName;
-                this.timeStamp = timeStamp;
-                this.timeStamp1 = timeStamp1;
-                this.stepCounts = stepCounts;
-                this.stepDelta = stepDelta;
-        }
 
-        public Activity(JSONObject json) {
-                this.sensorName = json.get("sensor_name").toString();
-                this.timeStamp = json.get("timestamp").toString();
-                this.timeStamp1 = json.get("time_stamp").toString();
-                this.stepCounts = ((JSONObject) json.get("sensor_data")).get("step_counts").toString();
-                this.stepDelta = ((JSONObject) json.get("sensor_data")).get("step_delta").toString();
-        }
-
+        public Activity() {}
 
         public String getSensorName() {
                 return sensorName;
@@ -53,20 +45,28 @@ public class Activity {
                 this.timeStamp1 = timeStamp1;
         }
 
+        public Map<String, String> getSensorData() {
+                return sensorData;
+        }
+
+        public void setSensorData(Map<String, String> sensorData) {
+                this.sensorData = sensorData;
+        }
+
         public String getStepCounts() {
-                return stepCounts;
+                return this.sensorData.get("step_counts");
         }
 
         public void setStepCounts(String stepCounts) {
-                this.stepCounts = stepCounts;
+                this.sensorData.put("step_counts", stepCounts);
         }
 
         public String getStepDelta() {
-                return stepDelta;
+                return this.sensorData.get("step_delta");
         }
 
         public void setStepDelta(String stepDelta) {
-                this.stepDelta = stepDelta;
+                this.sensorData.put("step_delta", stepDelta);
         }
 }
 

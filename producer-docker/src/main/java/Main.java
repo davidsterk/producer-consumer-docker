@@ -7,12 +7,13 @@
  */
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.Channel;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-
+import com.fasterxml.jackson.databind.JsonNode;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -44,17 +45,16 @@ public class Main {
             File inputFile = new File("input//input.txt");
             BufferedReader br = new BufferedReader(new FileReader(inputFile));
             String output;
+            ObjectMapper mapper = new ObjectMapper();
             while ((output = br.readLine()) != null) {
                 output = output.trim();
                 try {
                     if (!output.isEmpty()) {
-                        JSONObject json = (JSONObject) parser.parse(output);
+                        JsonNode json = mapper.readTree(output);
                         String sensorType = json.get("sensor_name").toString().toLowerCase();
-                        JSONObject message = new JSONObject();
-                        message.put("type", sensorType);
-                        message.put("contents", json);
-                        channel.basicPublish("", QUEUE_NAME, null, message.toString().getBytes(StandardCharsets.UTF_8));
-                        logger.info("Message Sent: " + message.toString());
+                        String message = "{\"type\":\"" + sensorType + "\",\"contents\":" + output + "}";
+                        channel.basicPublish("", QUEUE_NAME, null, message.getBytes(StandardCharsets.UTF_8));
+                        logger.info("Message Sent: " + message);
                     }
                 } catch (Exception ex) {
                     logger.error(ex.getMessage());

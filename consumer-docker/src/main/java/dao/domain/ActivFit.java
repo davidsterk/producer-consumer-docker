@@ -1,32 +1,23 @@
 package dao.domain;
 
-import org.json.simple.JSONObject;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.Map;
+
 /*
 Description: Class ActivFit. Domain model for ActivFit data
  */
 public class ActivFit {
 
+    @JsonProperty("sensor_name")
     private String sensorName;
-    private String startTime;
-    private String endTime;
-    private String activity;
-    private String duration;
+    @JsonProperty("timestamp")
+    private Map<String, String> timeStamp;
 
-    public ActivFit(String sensorName, String startTime, String endTime, String activity, String duration ) {
-        this.sensorName = sensorName;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.activity = activity;
-        this.duration = duration;
-    }
+    @JsonProperty("sensor_data")
+    private Map<String, String> sensorData;
 
-    public ActivFit(JSONObject json) {
-        this.sensorName = json.get("sensor_name").toString();
-        this.startTime = ((JSONObject) json.get("timestamp")).get("start_time").toString();
-        this.endTime = ((JSONObject) json.get("timestamp")).get("end_time").toString();
-        this.activity = ((JSONObject) json.get("sensor_data")).get("ActivFit").toString();
-        this.duration = ((JSONObject) json.get("sensor_data")).get("duration").toString();
-    }
+    public ActivFit() {}
 
     public String getSensorName() {
         return sensorName;
@@ -36,35 +27,51 @@ public class ActivFit {
         this.sensorName = sensorName;
     }
 
+    public Map<String, String> getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(Map<String, String> timeStamp) {
+        this.timeStamp = timeStamp;
+    }
+
+    public Map<String, String> getSensorData() {
+        return sensorData;
+    }
+
+    public void setSensorData(Map<String, String> sensorData) {
+        this.sensorData = sensorData;
+    }
+
     public String getStartTime() {
-        return startTime;
+        return this.timeStamp.get("start_time");
     }
 
     public void setStartTime(String startTime) {
-        this.startTime = startTime;
+        this.timeStamp.put("start_time", startTime);
     }
 
     public String getEndTime() {
-        return endTime;
+        return this.timeStamp.get("end_time");
     }
 
     public void setEndTime(String endTime) {
-        this.endTime = endTime;
+        this.timeStamp.put("end_time", endTime);
     }
 
     public String getActivity() {
-        return activity;
+        return this.sensorData.get("ActivFit");
     }
 
     public void setActivity(String activity) {
-        this.activity = activity;
+        this.sensorData.put("ActivFit", activity);
     }
 
     public String getDuration() {
-        return duration;
+        return this.sensorData.get("duration");
     }
 
     public void setDuration(String duration) {
-        this.duration = duration;
+        this.sensorData.put("duration", duration);
     }
 }

@@ -1,29 +1,26 @@
 package dao.domain;
 
-import org.json.simple.JSONObject;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.Map;
+
 /*
 Description: Class Battery. Domain model for Battery data
  */
 public class Battery {
 
+    @JsonProperty("sensor_name")
     private String sensorName;
+
+    @JsonProperty("timestamp")
     private String timeStamp;
-    private String percent;
-    private String charging;
 
-    public Battery(String sensorName, String timeStamp, String percent, String charging) {
-        this.sensorName=sensorName;
-        this.timeStamp=timeStamp;
-        this.percent=percent;
-        this.charging=charging;
+    @JsonProperty("sensor_data")
+    private Map<String, String> sensorData;
+
+    public Battery() {
     }
 
-    public Battery(JSONObject json) {
-        this.sensorName=json.get("sensor_name").toString();
-        this.timeStamp=json.get("timestamp").toString();
-        this.percent=((JSONObject) json.get("sensor_data")).get("percent").toString();
-        this.charging=((JSONObject) json.get("sensor_data")).get("charging").toString();
-    }
     public String getSensorName() {
         return sensorName;
     }
@@ -40,20 +37,28 @@ public class Battery {
         this.timeStamp = timeStamp;
     }
 
+    public Map<String, String> getSensorData() {
+        return sensorData;
+    }
+
+    public void setSensorData(Map<String, String> sensorData) {
+        this.sensorData = sensorData;
+    }
+
     public String getPercent() {
-        return percent;
+        return this.sensorData.get("percent");
     }
 
     public void setPercent(String percent) {
-        this.percent = percent;
+        this.sensorData.put("percent", percent);
     }
 
     public String getCharging() {
-        return charging;
+        return this.sensorData.get("charging");
     }
 
     public void setCharging(String charging) {
-        this.charging = charging;
+        this.sensorData.put("charging", charging);
     }
 
 }

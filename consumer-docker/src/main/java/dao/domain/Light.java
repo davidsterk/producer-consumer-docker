@@ -1,26 +1,20 @@
 package dao.domain;
 
-import org.json.simple.JSONObject;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Map;
 /*
 Description: Class Light. Domain model for light data
  */
 public class Light {
 
+    @JsonProperty("sensor_name")
     private String sensorName;
+    @JsonProperty("timestamp")
     private String timeStamp;
-    private String lux;
+    @JsonProperty("sensor_data")
+    private Map<String, String> sensorData;
 
-    public Light(String sensorName, String timeStamp, String lux) {
-        this.sensorName =sensorName;
-        this.timeStamp=timeStamp;
-        this.lux=lux;
-    }
-
-    public Light(JSONObject json) {
-        this.sensorName =json.get("sensor_name").toString();
-        this.timeStamp=json.get("timestamp").toString();;
-        this.lux =((JSONObject) json.get("sensor_data")).get("lux").toString();
-    }
+    public Light() {}
 
     public String getSensorName() {
         return sensorName;
@@ -38,11 +32,19 @@ public class Light {
         this.timeStamp = timeStamp;
     }
 
+    public Map<String, String> getSensorData() {
+        return sensorData;
+    }
+
+    public void setSensorData(Map<String, String> sensorData) {
+        this.sensorData = sensorData;
+    }
+
     public String getLux() {
-        return lux;
+        return this.sensorData.get("lux");
     }
 
     public void setLux(String lux) {
-        this.lux = lux;
+        this.sensorData.put("lux", lux);
     }
 }
