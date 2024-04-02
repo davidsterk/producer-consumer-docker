@@ -49,7 +49,7 @@ public class Main {
                     if (!output.isEmpty()) {
                         JsonNode json = mapper.readTree(output);
                         String sensorType = json.get("sensor_name").toString().toLowerCase();
-                        String message = "{\"type\":\"" + sensorType + "\",\"contents\":" + output + "}";
+                        String message = "{\"type\":" + sensorType + ",\"contents\":" + output + "}";
                         channel.basicPublish("", QUEUE_NAME, null, message.getBytes(StandardCharsets.UTF_8));
                         logger.info("Message Sent: " + message);
                     }
