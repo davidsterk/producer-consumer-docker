@@ -19,45 +19,97 @@ import service.StorageService;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.nio.charset.StandardCharsets;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import java.util.concurrent.*;
+import java.time.Instant;
+import java.time.Duration;
 
 public class Main {
-
+    
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
-
     private static final String RABBITMQ_HOST = System.getenv("RABBITMQ_HOST");
     private static final String QUEUE_NAME = "smartwatch";
     private static Connection connection;
     private static Channel channel;
+    private static Instant lastMessageTime;
 
     public static void main(String[] args) throws IOException, InterruptedException, TimeoutException {
 
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost(RABBITMQ_HOST);
-
         getChannel(factory);
         logger.info("Connected to RabbitMQ Channel: "+channel.getChannelNumber());
-
+        lastMessageTime = Instant.now();
+        CountDownLatch latch = new CountDownLatch(1);
+        ScheduledExecutorService executorService = getScheduledExecutorService(latch);
         try {
             channel.queueDeclare(QUEUE_NAME, true, false, false, null);
-            logger.info("Listening for Messages...");
-            ObjectMapper mapper = new ObjectMapper();
-            DeliverCallback deliverCallback = (consumerTag, message) -> {
-                try {
-                    StorageService.processData(mapper.readTree(new String(message.getBody(), StandardCharsets.UTF_8)));
-                    logger.info("Message Processed");
-                    channel.basicAck(message.getEnvelope().getDeliveryTag(), false);
-                } catch (Exception e) {
-                    logger.error(e.getMessage());
-                    System.exit(1);
-                }
-            };
+            DeliverCallback deliverCallback = getDeliverCallback();
             channel.basicConsume(QUEUE_NAME, false, deliverCallback, consumerTag -> {
             });
+            logger.info("Waiting for Messages...");
+            latch.await();
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
+        finally {
+            executorService.shutdown();
+            try {
+                if (!executorService.awaitTermination(60, TimeUnit.SECONDS)) {
+                    executorService.shutdownNow();
+                }
+            } catch (InterruptedException ex) {
+                executorService.shutdownNow();
+            }
+        }
+    }
+
+    /**
+     * getScheduledExecutorService: Returns a ScheduledExecutorService object that checks for inactivity every 5 seconds
+     * @param latch
+     * @return ScheduledExecutorService
+     */
+    private static ScheduledExecutorService getScheduledExecutorService(CountDownLatch latch) {
+        ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+        executorService.scheduleAtFixedRate(() -> {
+            logger.info("heartbeat at: "+Instant.now().toString());
+            if (lastMessageTime != null && Duration.between(lastMessageTime, Instant.now()).toSeconds() >= 30) {
+                try {
+                    if (channel != null && channel.isOpen()) {
+                        channel.close();
+                    }
+                    if (connection != null && connection.isOpen()) {
+                        connection.close();
+                    }
+                } catch (IOException | TimeoutException e) {
+                    logger.error(e.getMessage());
+                    System.exit(1);
+                }
+                logger.info("No activity for 30 seconds. Shutting down...");
+                latch.countDown();
+            }
+        }, 0, 5, TimeUnit.SECONDS);
+        return executorService;
+    }
+
+    /**
+     * getDeliverCallback: Returns a DeliverCallback object that processes the message and updates the last message time
+     * @return DeliverCallback
+     */
+    private static DeliverCallback getDeliverCallback() {
+        ObjectMapper mapper = new ObjectMapper();
+        DeliverCallback deliverCallback = (consumerTag, message) -> {
+            try {
+                logger.info("Message Received: "+new String(message.getBody(), StandardCharsets.UTF_8));
+                // Process the message and update the last message time
+                StorageService.processData(mapper.readTree(new String(message.getBody(), StandardCharsets.UTF_8)));
+                channel.basicAck(message.getEnvelope().getDeliveryTag(), false);
+                lastMessageTime = Instant.now();
+            } catch (Exception e) {
+                logger.error(e.getMessage());
+                System.exit(1);
+            }
+        };
+        return deliverCallback;
     }
 
     /**
