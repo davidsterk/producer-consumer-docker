@@ -1,26 +1,22 @@
 package dao.domain;
 
-import org.json.simple.JSONObject;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.Map;
+
 /*
 Description: Class HeartRate. Domain model for heart rate data
  */
 public class HeartRate {
 
+    @JsonProperty("sensor_name")
     private String sensorName;
+    @JsonProperty("timestamp")
     private String timeStamp;
-    private String bpm;
+    @JsonProperty("sensor_data")
+    private Map<String, String> sensorData;
 
-    public HeartRate(String sensorName, String timeStamp, String bpm) {
-        this.sensorName =sensorName;
-        this.timeStamp=timeStamp;
-        this.bpm=bpm;
-    }
-
-    public HeartRate(JSONObject json) {
-        this.sensorName =json.get("sensor_name").toString();
-        this.timeStamp=json.get("timestamp").toString();
-        this.bpm=((JSONObject) json.get("sensor_data")).get("bpm").toString();
-    }
+    public HeartRate() { }
 
     public String getSensorName() {
         return sensorName;
@@ -38,11 +34,20 @@ public class HeartRate {
         this.timeStamp = timeStamp;
     }
 
+    public Map<String, String> getSensorData() {
+        return sensorData;
+    }
+
+    public void setSensorData(Map<String, String> sensorData) {
+        this.sensorData = sensorData;
+    }
+
     public String getBpm() {
-        return bpm;
+        return this.sensorData.get("bpm");
     }
 
     public void setBpm(String bpm) {
-        this.bpm = bpm;
+        this.sensorData.put("bpm", bpm);
     }
+
 }

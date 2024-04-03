@@ -1,26 +1,24 @@
 package dao.domain;
 
-import org.json.simple.JSONObject;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
+
+import java.util.Map;
+
 /*
 Description: Class Bluetooth. Domain model for Bluetooth data
  */
 public class Bluetooth {
 
+    @JsonProperty("sensor_name")
     private String sensorName;
+    @JsonProperty("timestamp")
     private String timeStamp;
-    private String state;
+    @JsonProperty("sensor_data")
+    private Map<String, String> sensorData;
 
-    public Bluetooth(String sensorName, String timeStamp, String state) {
-        this.sensorName =sensorName;
-        this.timeStamp=timeStamp;
-        this.state=state;
-    }
+    public Bluetooth() {}
 
-    public Bluetooth(JSONObject json) {
-        this.sensorName =json.get("sensor_name").toString();
-        this.timeStamp=json.get("timestamp").toString();
-        this.state=((JSONObject) json.get("sensor_data")).get("state").toString();
-    }
     public String getSensorName() {
         return sensorName;
     }
@@ -37,11 +35,19 @@ public class Bluetooth {
         this.timeStamp = timeStamp;
     }
 
+    public Map<String, String> getSensorData() {
+        return sensorData;
+    }
+
+    public void setSensorData(Map<String, String> sensorData) {
+        this.sensorData = sensorData;
+    }
+
     public String getState() {
-        return state;
+        return this.sensorData.get("state");
     }
 
     public void setState(String state) {
-        this.state = state;
+        this.sensorData.put("state", state);
     }
 }

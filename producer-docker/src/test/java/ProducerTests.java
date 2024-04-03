@@ -1,8 +1,8 @@
 import enums.SensorType;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class Tests {
+public class ProducerTests {
 
     /*
 Tests whether the SensorType getSensorType handles nulls

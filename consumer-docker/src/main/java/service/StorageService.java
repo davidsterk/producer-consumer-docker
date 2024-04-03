@@ -5,16 +5,17 @@ Class StorageService, Singleton that assigns the message object to the appropria
 import dao.*;
 import dao.domain.*;
 import enums.SensorType;
-import org.json.simple.JSONObject;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class StorageService {
 
-    private static final Logger logger = LoggerFactory.getLogger(StorageService.class);
-    private static final DaoFactory daoFactory;
+    private static Logger logger = LoggerFactory.getLogger(StorageService.class);
+    public static DaoFactory daoFactory;
 
     private StorageService(){}
+
 /*
 Initialize daoFactory
  */
@@ -28,12 +29,11 @@ Initialize daoFactory
      * @param json
      * @throws Exception
      */
-    public static void processData(JSONObject json) throws Exception {
-        SensorType sensorType = SensorType.getSensorType(json.get("type").toString());
-        JSONObject contents = (JSONObject) json.get("contents");
+    public static void processData(JsonNode json) throws Exception {
+        SensorType sensorType = SensorType.getSensorType(json.get("type").asText());
+        JsonNode contents = json.get("contents");
         Dao dao = daoFactory.getDao(sensorType);
         dao.create(DomainFactory.createModel(sensorType, contents));
         logger.info(sensorType.getType() + " object inserted into msyql");
-
     }
 }
