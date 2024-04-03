@@ -5,13 +5,14 @@ two different executables to manage the producer and consumer functions. Message
 consumer using RabbitMQ as a message broker. The consumer inserts messages into a mysql database. The producer,
 consumers, rabbitmq host, and mysql host run in their own docker containers.
 
-## Producer-Consumer
+## Producer
 The producer program reads an input file containing smartwatch sensor data in json format. For each record, it generates a
 message that is inserted into the rabbitmq queue. After completion, the program and docker container terminates.
 
-## Consumer-Producer
+## Consumer
 The consumer program listens and takes messages from the rabbitmq queue. Based on the sensor type, it creates the
-appropriate data access object model which is used to insert into the mysql database.
+appropriate data access object model which is used to insert into the mysql database. The consumer program runs indefinitely
+until the rabbitmq queue is empty and no new messages have been received for 30 seconds.
 
 ## Build
 The project is completely self-contained and can be run with Docker Compose using the docker-compose.yml file. Open a
